@@ -23,6 +23,7 @@ An application that cannot `ALTER TABLE` cannot be injected into schema changes.
 - Grant privileges to group roles; login roles get access via membership, never direct grants. (`{app}_owner` is the one login that holds privileges directly — by owning, not by grant.)
 - Set `ALTER DEFAULT PRIVILEGES FOR ROLE {app}_owner` so objects created by future migrations inherit the grants, including `REVOKE EXECUTE ON FUNCTIONS FROM PUBLIC`; PostgreSQL grants function execution to `PUBLIC` by default.
 - Revoke world access once per database: `REVOKE CONNECT ON DATABASE {app} FROM PUBLIC;` and `REVOKE CREATE ON SCHEMA public FROM PUBLIC;` per [schema layout and search_path](schema-layout-and-search-path.md).
+- Set standing timeouts on every runtime login role so a runaway query or an abandoned transaction cannot pile up a lock queue, block migrations, and stall vacuum: `statement_timeout` sized to the client's own timeout, plus a short `idle_in_transaction_session_timeout`. `ALTER ROLE ... SET` binds to the role that logs in, not to group membership, so set them on each login member — never on the group roles or `{app}_owner`.
 - Carve sensitive tables out of the blanket read grant: in the migration that creates a table holding credentials, tokens, or regulated PII, `REVOKE SELECT ON {table} FROM {app}_ro`; masked [views](views-and-materialized-views.md) are the sanctioned reporting surface over such tables.
 - Carve audit tables out of the blanket write grant: `REVOKE UPDATE, DELETE ON {audit_table} FROM {app}_rw` in the migration that creates it, so the audit trail stays append-only even for a compromised app connection; see [triggers](triggers.md).
 - Enforce tenant and row scoping in the application query layer (`WHERE tenant_id = $1` via the framework's scoping mechanism) — and remember it never applies to `{app}_ro` connections: on multi-tenant databases, human or BI access through `{app}_ro` is unscoped and must be a deliberate decision.
@@ -35,6 +36,7 @@ An application that cannot `ALTER TABLE` cannot be injected into schema changes.
 - Do not grant privileges to individual login users; membership in group roles only.
 - Do not use RLS; if a hard row-level isolation requirement arrives (compliance, direct third-party DB access), treat it as an architecture decision made outside these defaults.
 - Do not scatter one-off `GRANT`s in application code or ad hoc sessions; grants live in migrations.
+- Do not set `statement_timeout` on `{app}_owner` or database-wide; migrations, backfills, and `VALIDATE CONSTRAINT` legitimately run long and are guarded by `lock_timeout` instead. Known long jobs override per session (`SET statement_timeout = ...`) rather than raising the role default.
 - Do not share one login role between the app and humans; humans go through `{app}_ro` (or their own audited logins).
 
 ## Example
@@ -67,12 +69,22 @@ ALTER DEFAULT PRIVILEGES FOR ROLE shop_owner IN SCHEMA public
 CREATE ROLE shop_app LOGIN IN ROLE shop_rw;
 CREATE ROLE shop_metabase LOGIN IN ROLE shop_ro;
 
+-- Standing timeouts bind to the login role, not to group membership:
+ALTER ROLE shop_app SET statement_timeout = '30s';
+ALTER ROLE shop_app SET idle_in_transaction_session_timeout = '60s';
+ALTER ROLE shop_metabase SET statement_timeout = '5min';  -- reporting runs longer
+ALTER ROLE shop_metabase SET idle_in_transaction_session_timeout = '60s';
+
 -- Later, in the migration that creates a sensitive table:
 REVOKE SELECT ON api_tokens FROM shop_ro;
 
 -- And in the migration that creates an audit table:
 REVOKE UPDATE, DELETE ON order_state_changes FROM shop_rw;
 ```
+
+## Version Notes
+
+- `transaction_timeout` (PG17+) bounds total transaction duration even when every statement is fast and no idle gap trips the idle timeout; set it alongside the two standing timeouts on PG17+ targets. Older targets rely on `statement_timeout` and `idle_in_transaction_session_timeout` alone.
 
 ## Exceptions
 
