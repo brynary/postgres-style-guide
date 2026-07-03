@@ -4,8 +4,6 @@ Load this file for PostgreSQL style policy, then load only the guideline pages n
 
 Guideline pages are policy. Do not load every guideline page by default.
 
-Note: this index lists the planned page set. Pages are drafted per [DRAFTING.md](DRAFTING.md) after [DECISIONS.md](DECISIONS.md) is resolved; links go live as pages land.
-
 ## Foundations
 
 - [House style and Postgres philosophy](guidelines/house-style-and-postgres-philosophy.md) - load for overall posture: integrity in the database, logic in the application, normalized-first modeling, and version assumptions.
