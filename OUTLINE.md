@@ -14,7 +14,7 @@ Use [TEMPLATE.md](TEMPLATE.md) for every guideline page.
 
 ## Packaged Skill Shape
 
-The final skill should follow the progressive-disclosure pattern in [SKILL.md](SKILL.md), [root.md](root.md), and [guidelines.md](guidelines.md): a small root router, focused guideline pages, and task workflows under `workflows/`. Planning files and research reports should not be part of the packaged skill by default.
+The final skill should follow the progressive-disclosure pattern in [SKILL.md](SKILL.md) and [guidelines.md](guidelines.md): a small root router, focused guideline pages, and task workflows under `workflows/`. Planning files and research reports should not be part of the packaged skill by default.
 
 ## Decision Register
 

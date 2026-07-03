@@ -15,7 +15,7 @@ Load [guidelines.md](../guidelines.md), then load these guideline pages as neede
 ## Workflow
 
 1. Capture the actual slow query with its real bind values (from logs, `pg_stat_statements`, or application telemetry), not a paraphrase of it.
-2. Record a baseline: `EXPLAIN (ANALYZE, BUFFERS)` on a production-representative dataset. Development databases with 100 rows prove nothing.
+2. Record a baseline: `EXPLAIN (ANALYZE, BUFFERS)` on a production-representative dataset. Development databases with 100 rows prove nothing. `EXPLAIN (ANALYZE)` executes the statement, so wrap any `INSERT`/`UPDATE`/`DELETE`/`MERGE` in `BEGIN; ...; ROLLBACK;`.
 3. Read the plan from the innermost expensive node outward. Classify the bottleneck:
    - Sequential scan on a large table with a selective filter: missing or unusable index.
    - Index exists but unused: expression mismatch, type mismatch, low selectivity, or operators the index cannot serve (GIN vs `=`).
@@ -32,6 +32,11 @@ Load [guidelines.md](../guidelines.md), then load these guideline pages as neede
 
 ```sql
 EXPLAIN (ANALYZE, BUFFERS) SELECT ...;
+
+-- EXPLAIN (ANALYZE) executes DML; never run it bare against live data:
+BEGIN;
+EXPLAIN (ANALYZE, BUFFERS) UPDATE ...;
+ROLLBACK;
 
 -- Statement-level view of what is actually slow:
 SELECT query, calls, mean_exec_time, rows
@@ -51,6 +56,7 @@ ANALYZE orders;  -- refresh statistics for one table
 
 - Do not add an index as the first move; most slow queries are shape problems (missing filter, N+1, offset pagination) the index would only mask.
 - Do not tune against `EXPLAIN` without `ANALYZE`; estimates are the thing being debugged.
+- Do not `EXPLAIN (ANALYZE)` DML outside an explicitly rolled-back transaction; `ANALYZE` performs the write.
 - Do not test on unrepresentative data sizes.
 - Do not add planner hints via `MATERIALIZED`/`NOT MATERIALIZED` or `enable_*` settings as a fix; they are diagnostics, and any kept fence needs a comment and evidence.
 - Do not keep a "faster" query that violates the query-style guidelines without recording the measured justification.

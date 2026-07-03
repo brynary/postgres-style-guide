@@ -15,6 +15,7 @@ Use `timestamptz` for all timestamps and `date` for calendar dates; model validi
 - Use `interval` for durations only when the duration itself is the data; otherwise store the two instants.
 - Use `tstzrange` or `daterange` with `[)` bounds for validity periods instead of start/end column pairs.
 - Enforce non-overlap declaratively: `UNIQUE (key, period WITHOUT OVERLAPS)` on the range column (PG18).
+- Install `btree_gist` (`CREATE EXTENSION btree_gist;`, in its own migration) before the first constraint that mixes a scalar key with a range: GiST has no default operator class for scalar types like `uuid`, so both `WITHOUT OVERLAPS` constraints and `EXCLUDE USING gist` fail without it.
 - Pass ISO 8601 strings when writing timestamps from SQL (`'2026-07-03T14:00:00Z'`).
 - Compare and bucket in SQL with `date_trunc` and range operators (`&&`, `@>`), not string manipulation.
 
@@ -29,6 +30,7 @@ Use `timestamptz` for all timestamps and `date` for calendar dates; model validi
 ## Example
 
 ```sql
+-- Requires btree_gist for the scalar room_id key part.
 CREATE TABLE room_bookings (
   id uuid DEFAULT uuidv7() PRIMARY KEY,
   room_id uuid NOT NULL REFERENCES rooms (id) ON DELETE RESTRICT,
@@ -48,7 +50,7 @@ WHERE rb.booked_during @> now();
 
 ## Version Notes
 
-- `WITHOUT OVERLAPS` and temporal `PERIOD` foreign keys require PostgreSQL 18. On older targets, use an exclusion constraint: `EXCLUDE USING gist (room_id WITH =, booked_during WITH &&)`.
+- `WITHOUT OVERLAPS` and temporal `PERIOD` foreign keys require PostgreSQL 18. On older targets, use an exclusion constraint: `EXCLUDE USING gist (room_id WITH =, booked_during WITH &&)`. The `btree_gist` requirement applies to both forms.
 
 ## Exceptions
 

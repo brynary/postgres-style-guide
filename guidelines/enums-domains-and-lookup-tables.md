@@ -49,7 +49,7 @@ CREATE TABLE us_states (
 
 ## Migration Notes
 
-- Changing a `CHECK` list on a large table: add the new constraint `NOT VALID`, `VALIDATE CONSTRAINT` separately, then drop the old one; see the safe schema migration workflow.
+- Changing a `CHECK` list on a large table: the canonical name is taken until the old constraint drops, so add the new constraint `NOT VALID` under a temporary name (`{table}_{column}_check_new`), `VALIDATE CONSTRAINT` separately, drop the old constraint, then `ALTER TABLE ... RENAME CONSTRAINT` back to the canonical name; see the safe schema migration workflow.
 
 ## Exceptions
 

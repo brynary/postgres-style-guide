@@ -10,7 +10,7 @@ Agent-written SQL drifts without a fixed posture. PostgreSQL supports many valid
 
 ## Do
 
-- Assume PostgreSQL 18+ for new databases and new DDL; use modern features (`uuidv7()`, virtual generated columns, temporal constraints, `RETURNING OLD/NEW`) where pages call for them.
+- Assume PostgreSQL 18+ for new databases and new DDL; use modern features (`uuidv7()`, virtual generated columns, temporal constraints, `RETURNING OLD/NEW`, `NOT NULL ... NOT VALID`) where pages call for them.
 - Enforce data integrity in the database: `NOT NULL`, foreign keys, `CHECK` constraints, and unique constraints; see [constraints and NULL semantics](constraints-and-null-semantics.md).
 - Keep business workflow logic in the application; database logic is limited to integrity, auditing, and derived data; see [triggers](triggers.md) and [functions and procedures](functions-and-procedures.md).
 - Model core business data relationally with real columns and foreign keys; see [JSONB, arrays, and normalization](jsonb-arrays-and-normalization.md).

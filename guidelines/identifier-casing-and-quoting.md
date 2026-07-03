@@ -31,7 +31,7 @@ PostgreSQL folds unquoted identifiers to lowercase; quoting makes a name case-se
 -- Good: unquoted snake_case, no reserved words.
 CREATE TABLE api_tokens (
   id uuid DEFAULT uuidv7() PRIMARY KEY,
-  user_id uuid NOT NULL REFERENCES users (id) ON DELETE RESTRICT,
+  user_id uuid NOT NULL REFERENCES users (id) ON DELETE CASCADE,
   token_digest text NOT NULL,
   expires_at timestamptz NOT NULL
 );

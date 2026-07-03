@@ -15,11 +15,13 @@ Uniform lifecycle columns make debugging, syncing, and auditing possible everywh
   - `updated_at timestamptz NOT NULL DEFAULT now()`
 - Maintain `updated_at` with the shared `set_updated_at()` trigger on every such table; the trigger pattern lives in [triggers](triggers.md).
 - Hard-delete rows with `DELETE`; rely on `ON DELETE RESTRICT` (see [foreign keys and relationships](foreign-keys-and-relationships.md)) to surface dependents.
-- Where the product genuinely needs recovery or in-place history, use `deleted_at timestamptz` soft delete on that table, and then always:
-  - convert unique constraints to partial unique indexes: `CREATE UNIQUE INDEX ... WHERE deleted_at IS NULL`;
+- Where the product genuinely needs recovery or audit history, use `deleted_at timestamptz` soft delete on that table, and then always:
+  - convert unique constraints to partial unique indexes: `CREATE UNIQUE INDEX ... WHERE deleted_at IS NULL` — noting that partial unique indexes cannot be foreign-key targets, so restructure any FK that referenced the constraint first;
+  - decide and document the child-row policy: soft delete never issues `DELETE`, so `ON DELETE RESTRICT` will not surface dependents — either cascade the soft delete in the application, block it while dependents exist, or restrict soft delete to leaf tables;
   - scope application queries to `deleted_at IS NULL`;
+  - repeat the index predicate in upsert conflict targets; see [DML, upserts, and RETURNING](dml-upserts-and-returning.md);
   - define a purge/retention job.
-- Use generated columns for values derived from the same row; virtual by default, `STORED` when the column is indexed, expensive to compute, or must flow through logical replication.
+- Use generated columns for values derived from the same row; virtual by default, `STORED` when the column is indexed, hot on the read path, expensive to compute, or must flow through logical replication.
 - Give business defaults with `DEFAULT` at the column (`state text NOT NULL DEFAULT 'pending'`).
 
 ## Avoid

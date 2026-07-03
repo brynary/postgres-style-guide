@@ -15,10 +15,10 @@ Views are a public contract over the schema: cheap to create, expensive to evolv
 ## Do
 
 - Define a view when a read-only analytics report is consumed by more than one surface (app, admin, BI); the view is the single definition of the report.
-- Use views for column masking: exposing a safe subset of a sensitive table to a restricted role, paired with grants per [roles, privileges, and row-level security](roles-privileges-and-row-level-security.md).
+- Use views for column masking: exposing a safe subset of a sensitive table to a restricted role. A masking view runs with its owner's privileges (the default): do not set `security_invoker`, grant the restricted role `SELECT` on the view only, keep its base-table access revoked per [roles, privileges, and row-level security](roles-privileges-and-row-level-security.md), and review the view like a `SECURITY DEFINER` boundary.
+- Set `security_invoker = true` on views whose consumers already hold the base-table privileges, so the querying role's own permissions apply. The two patterns are mutually exclusive per view: a masking view with `security_invoker` either fails with permission errors or forces the base-table grant it exists to avoid.
 - Alias every output column explicitly; no `SELECT *` in a view body (see [SELECT structure and join style](select-structure-and-join-style.md)).
 - Write view bodies with the same CTE decomposition rules as queries.
-- Use `security_invoker = true` on views over sensitive tables so the querying role's permissions apply.
 - Use a materialized view only when the underlying query is measured-too-slow for live reads; document the refresh strategy (what refreshes it, how often, acceptable staleness) in the migration.
 - Create the unique index every materialized view needs for `REFRESH MATERIALIZED VIEW CONCURRENTLY`, and refresh concurrently.
 
@@ -33,7 +33,9 @@ Views are a public contract over the schema: cheap to create, expensive to evolv
 ## Example
 
 ```sql
--- One report definition, consumed by app dashboard, admin, and BI:
+-- One report definition, consumed by app dashboard, admin, and BI.
+-- All consumers hold base-table SELECT, so security_invoker applies
+-- (a masking view would instead rely on owner privileges):
 CREATE VIEW monthly_revenue_by_plan
 WITH (security_invoker = true) AS
 WITH paid_orders AS (

@@ -10,18 +10,19 @@ An unqualified `UPDATE` or `DELETE` is the most destructive statement an agent c
 
 ## Do
 
-- Write a `WHERE` clause on every `UPDATE`/`DELETE`; mark the rare intentional full-table write with an explicit comment: `-- intentional full-table update`.
+- Write a `WHERE` clause on every `UPDATE`/`DELETE`; the rare intentional full-table write carries both `WHERE true` and an explicit comment: `-- intentional full-table update`.
 - Read written rows with `RETURNING` instead of a follow-up `SELECT`.
 - Use `RETURNING old.col, new.col` (PG18) when the delta matters: audit records, cache invalidation, change notifications.
 - Upsert with `INSERT ... ON CONFLICT (cols) DO UPDATE SET ...`; reference incoming values as `excluded.col`.
 - Target `ON CONFLICT` at the specific constraint's columns, not `DO NOTHING` without a conflict target.
+- When the arbiter is a partial unique index (soft-delete tables), repeat its predicate in the conflict target: `ON CONFLICT (email) WHERE deleted_at IS NULL DO UPDATE ...`; a bare column list matches only full constraints and fails at runtime against a partial index.
 - Use `MERGE` when synchronizing a table against a source set with insert, update, and delete actions in one pass.
 - Batch bulk changes with data-modifying CTEs or multi-row `VALUES`/`UNNEST` statements, not row-at-a-time loops.
 - Batch very large updates/deletes in chunks (by key range) to bound lock time and WAL spikes; the batching procedure lives in the safe schema migration workflow.
 
 ## Avoid
 
-- Do not write `UPDATE`/`DELETE` without `WHERE`, ever, even in scripts.
+- Do not write `UPDATE`/`DELETE` without a `WHERE` clause, even in scripts; an intentional full-table write is spelled `WHERE true` plus the marker comment.
 - Do not check-then-write for uniqueness in application code; concurrent writers race; `ON CONFLICT` exists for this.
 - Do not use `MERGE` for simple row upserts; `ON CONFLICT` is atomic under concurrency by design and simpler.
 - Do not follow an `INSERT` with a `SELECT` to learn what was written.

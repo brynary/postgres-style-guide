@@ -16,20 +16,21 @@ Load [guidelines.md](../guidelines.md), then load these guideline pages as neede
 ## Workflow
 
 1. Confirm the PostgreSQL version; target PG18+. Record the version assumption where the project documents its stack.
-2. Create the database with `UTF8` encoding and, unless the project has a locale requirement, a deterministic default collation.
-3. Lock down the schema: keep application objects in `public` and run `REVOKE CREATE ON SCHEMA public FROM PUBLIC;`.
-4. Create the three-role topology (`{app}_owner`, `{app}_rw`, `{app}_ro`), grants, and `ALTER DEFAULT PRIVILEGES`, per the roles guideline; create login roles as members.
-5. Configure the migration tool to connect as `{app}_owner` and the application as the `{app}_rw` login member; verify the app connection cannot run DDL.
-6. Install only extensions the project needs now, each in its own migration with a comment saying what uses it.
-7. Create the shared `set_updated_at()` trigger function before the first table migration so tables can attach it immediately.
-8. Write the first table migrations following the schema-design guidelines: `uuidv7()` keys, lifecycle columns with triggers, FKs with indexes, `NOT NULL` defaults, named constraints.
-9. Seed lookup tables in migrations, not by hand.
-10. Set up the safe-migration guardrails from day one: `lock_timeout` in the migration template and the safe schema migration workflow linked from the project docs, so habits do not change when the database goes live.
-11. Verify the topology before first deploy: connect as each role and confirm it can do exactly what it should (owner: DDL; rw: DML only; ro: SELECT only).
+2. Create the three-role topology first (`{app}_owner` as the migration login, `{app}_rw`, `{app}_ro`), per the roles guideline.
+3. Create the database with `UTF8` encoding, `OWNER {app}_owner` (only the database owner holds `CREATE` on `public` since PG15, and migrations need it), and, unless the project has a locale requirement, a deterministic default collation.
+4. Lock down world access: `REVOKE CONNECT ON DATABASE {app} FROM PUBLIC;`, grant `CONNECT` to the three roles, and keep application objects in `public` with `REVOKE CREATE ON SCHEMA public FROM PUBLIC;` (default since PG15; keep it explicit).
+5. Apply the grants and `ALTER DEFAULT PRIVILEGES` per the roles guideline — tables, sequences, and `REVOKE EXECUTE ON FUNCTIONS FROM PUBLIC` — and create login roles as members.
+6. Configure the migration tool to connect as `{app}_owner` (its only client) and the application as the `{app}_rw` login member; verify the app connection cannot run DDL, and that objects created by migrations are owned by `{app}_owner` (default privileges fire only for that role's objects).
+7. Install only extensions the project needs now, each in its own migration with a comment saying what uses it (for example `btree_gist` the first time a temporal or exclusion constraint needs it).
+8. Create the shared `set_updated_at()` trigger function before the first table migration so tables can attach it immediately.
+9. Write the first table migrations following the schema-design guidelines: `uuidv7()` keys, lifecycle columns with triggers, FKs with indexes, `NOT NULL` defaults, named constraints.
+10. Seed lookup tables in migrations, not by hand.
+11. Set up the safe-migration guardrails from day one: `lock_timeout` in the migration template and the safe schema migration workflow linked from the project docs, so habits do not change when the database goes live.
+12. Verify the topology before first deploy: connect as each login (owner, app member, read-only member) and confirm it can do exactly what it should (owner: DDL; rw: DML only, no DDL; ro: SELECT only).
 
 ## Avoid
 
-- Do not develop and deploy as a superuser or the owner role from the application.
+- Do not develop and deploy as a superuser from the application; the owner login belongs to the migration pipeline alone.
 - Do not install extensions speculatively.
 - Do not hand-create objects outside migrations, even during setup; the first environment rebuild will miss them.
 - Do not defer the role topology "until production"; retrofitting grants across an accumulated schema is the painful version.

@@ -59,3 +59,4 @@ CREATE INDEX order_items_product_id_idx ON order_items (product_id);
 
 - Names that would exceed 63 bytes: shorten the column list portion while keeping the table name and suffix intact.
 - Legacy tables with established singular names: match the surrounding convention within that table rather than mixing styles.
+- Schemas managed by an ORM whose migration tool auto-names constraints and indexes (Rails, Django): follow the surrounding ORM convention for new objects, passing explicit names only where the ORM would generate a nondeterministic or truncated name. The suffix scheme above applies in full to greenfield and hand-written-SQL schemas.

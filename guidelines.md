@@ -48,10 +48,8 @@ Guideline pages are policy. Do not load every guideline page by default.
 
 ## Routing Notes
 
-- For schema changes on existing databases, load [workflows/safe-schema-migration.md](workflows/safe-schema-migration.md) before individual DDL guidelines.
-- For new database setup, load [workflows/new-database-setup.md](workflows/new-database-setup.md) before individual setup guidelines.
-- For slow queries, load [workflows/query-performance-investigation.md](workflows/query-performance-investigation.md) before adding indexes.
-- For review or refactor work, load [workflows/schema-and-query-review.md](workflows/schema-and-query-review.md) first.
+Workflow dispatch lives in [SKILL.md](SKILL.md); these notes only cover which guideline pages to combine.
+
 - For new tables, always include object naming, primary keys, constraints, and standard columns.
 - For anything touching `SECURITY DEFINER`, grants, or multi-tenant data, include roles/privileges/RLS.
 - For advanced topics like triggers, materialized views, or RLS, load the page only when the task directly needs it.

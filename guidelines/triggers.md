@@ -15,8 +15,8 @@ Triggers run no matter which path wrote the row — ORM, psql, script, another s
 ## Do
 
 - Maintain `updated_at` with the shared `set_updated_at()` trigger; the column requirement lives in [standard columns and row lifecycle](standard-columns-and-row-lifecycle.md).
-- Write audit trails with `AFTER` row triggers inserting into an append-only audit table.
-- Maintain denormalized aggregates (counter columns) with triggers when the source of truth is multiple write paths.
+- Write audit trails with `AFTER` row triggers inserting into an append-only audit table, and make append-only real with grants: `REVOKE UPDATE, DELETE` on the audit table from the app role, per [roles, privileges, and row-level security](roles-privileges-and-row-level-security.md).
+- Maintain denormalized aggregates (counter columns) with triggers when the source of truth is multiple write paths and the parent's concurrent child-write rate is low: every child write takes a row lock on the parent, so hot parents serialize into lock convoys and deadlocks — prefer periodic recompute there.
 - Prefer, in order: constraint, then generated column, then trigger; a trigger is the tool when the first two cannot express the rule.
 - Use `BEFORE` triggers to adjust the row being written (`updated_at`), `AFTER` triggers to record side effects (audit rows, counters).
 - Keep each trigger function small and single-purpose; one behavior per trigger.
@@ -28,7 +28,7 @@ Triggers run no matter which path wrote the row — ORM, psql, script, another s
 - Do not put business workflow logic in triggers (state transitions, notifications-with-meaning, cross-service effects).
 - Do not maintain values a `STORED` generated column can compute from the same row.
 - Do not enforce non-overlap or cross-row uniqueness in triggers; temporal and exclusion constraints own that (see [temporal data and time zones](temporal-data-and-time-zones.md)).
-- Do not chain triggers so one trigger's write fires another; that is invisible control flow.
+- Do not chain triggers so one trigger's write fires another; that is invisible control flow. (A trigger's write firing the target table's own `set_updated_at` trigger is the tolerated exception: it adjusts the row in place and cascades no further.)
 - Do not swallow errors inside trigger functions; a failing trigger must fail the write.
 - Do not toggle triggers off during bulk operations without recording why and restoring them in the same migration.
 

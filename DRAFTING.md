@@ -5,7 +5,7 @@ Use these instructions when turning the outline into guideline pages.
 ## Priorities
 
 1. Resolve the decision register in [DECISIONS.md](DECISIONS.md), flagship decisions first (D7, D12, D15, D21, D23, D26, D37, D42).
-2. Keep [SKILL.md](SKILL.md) and [root.md](root.md) small and use them as routers.
+2. Keep [SKILL.md](SKILL.md) small and use it as the router.
 3. Draft the core guideline pages first: naming, keys, scalar and temporal types, constraints, indexes, join style, CTEs, and DML.
 4. Add workflow pages only where repeated task procedures need more than policy.
 5. Add advanced guideline pages only where the target databases need them.
@@ -36,11 +36,11 @@ Use these instructions when turning the outline into guideline pages.
 
 ## Progressive Disclosure
 
-- Treat [SKILL.md](SKILL.md) as the skill entrypoint and [root.md](root.md) as the root router, not the guide itself.
+- Treat [SKILL.md](SKILL.md) as the skill entrypoint and root router, not the guide itself.
 - Keep detailed policy in `guidelines/` pages.
 - Keep procedural task flows in `workflows/` pages.
 - Keep [guidelines.md](guidelines.md) as the one-page guideline index.
-- Link guideline and workflow files directly from [root.md](root.md), [guidelines.md](guidelines.md), or [SKILL.md](SKILL.md); avoid deep reference chains.
+- Link guideline and workflow files directly from [SKILL.md](SKILL.md) or [guidelines.md](guidelines.md); avoid deep reference chains.
 - Do not load every guideline page for ordinary tasks.
 - Use routing examples for common task types so agents know which pages to load.
 
