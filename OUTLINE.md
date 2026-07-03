@@ -41,7 +41,7 @@ Use [DECISIONS.md](DECISIONS.md) to resolve style decisions before drafting fina
    - Decision points: D10, D11.
 
 5. **SQL Formatting and Comments**
-   - Cover keyword casing, comma placement, indentation, line breaks, alias conventions, column qualification, `--` vs `/* */`, and `COMMENT ON` usage.
+   - Cover keyword casing, comma placement, indentation, line breaks, alias conventions, column qualification, `--` vs `/* */`, and the no-`COMMENT ON` policy.
    - Decision points: D4, D5, D6, D34.
 
 ### Schema Design and Data Types
@@ -67,7 +67,7 @@ Use [DECISIONS.md](DECISIONS.md) to resolve style decisions before drafting fina
     - Decision points: D21, D22.
 
 11. **Enums, Domains, and Lookup Tables**
-    - Cover closed value sets: native enums vs lookup tables vs `text` plus `CHECK`, enum evolution pain, and domains for reusable scalar validation.
+    - Cover closed value sets: `text` plus `CHECK` as the default, lookup tables for rich or large sets, native enums only for truly static sets, and the ban on domain types.
     - Decision points: D23, D24.
 
 12. **Standard Columns and Row Lifecycle**
@@ -121,13 +121,13 @@ Use [DECISIONS.md](DECISIONS.md) to resolve style decisions before drafting fina
     - Decision points: D43.
 
 23. **Triggers**
-    - Cover the minimal-trigger doctrine, the narrow cases where triggers are right (auditing, invariants constraints cannot express), and preferring constraints and generated columns.
+    - Cover the sanctioned trigger roles (audit tables, derived data such as `updated_at` and counters), the ban on business workflow logic in triggers, and preferring constraints and generated columns where they can express the rule.
     - Decision points: D42.
 
 ### Security
 
 24. **Roles, Privileges, and Row-Level Security**
-    - Cover role topology (owner/migration, app runtime, read-only), deny-by-default grants, `ALTER DEFAULT PRIVILEGES`, locking down `PUBLIC`, and when RLS is warranted.
+    - Cover the three-role topology (owner/migration, app runtime, read-only), deny-by-default grants, `ALTER DEFAULT PRIVILEGES`, locking down `PUBLIC`, and the avoid-RLS posture (app-layer scoping instead).
     - Decision points: D44, D45.
 
 ## Workflow Map
