@@ -16,7 +16,7 @@ Data inside `jsonb` loses what the database provides: type checking, constraints
 - Always use `jsonb`, never `json`; `json` stores text and lacks an equality operator.
 - Use arrays only for flat lists of primitives with no FK targets and no per-element metadata (`tags text[]`).
 - Reach for a child or junction table the moment list elements reference another table or carry attributes.
-- Query `jsonb` and arrays with containment operators (`@>`, `<@`, `?`); GIN indexing rules live in [advanced indexes](advanced-indexes.md).
+- Query `jsonb` and arrays with containment operators; the operator idioms and GIN indexing rules live in [advanced indexes](advanced-indexes.md).
 - Validate required `jsonb` structure with a `CHECK` when a key is load-bearing: `CHECK (payload ? 'event_type')`.
 
 ## Avoid
@@ -44,11 +44,6 @@ CREATE TABLE imported_listings (
   updated_at timestamptz NOT NULL DEFAULT now(),
   CONSTRAINT imported_listings_source_external_id_key UNIQUE (source, external_id)
 );
-
--- Containment query against the cold side:
-SELECT il.id
-FROM imported_listings il
-WHERE il.raw_attributes @> '{"heating": "gas"}';
 ```
 
 ## Exceptions

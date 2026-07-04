@@ -17,7 +17,7 @@ Views are a public contract over the schema: cheap to create, expensive to evolv
 - Define a view when a read-only analytics report is consumed by more than one surface (app, admin, BI); the view is the single definition of the report.
 - Use views for column masking: exposing a safe subset of a sensitive table to a restricted role. A masking view runs with its owner's privileges (the default): do not set `security_invoker`, grant the restricted role `SELECT` on the view only, keep its base-table access revoked per [roles, privileges, and row-level security](roles-privileges-and-row-level-security.md), and review the view like a `SECURITY DEFINER` boundary.
 - Set `security_invoker = true` on views whose consumers already hold the base-table privileges, so the querying role's own permissions apply. The two patterns are mutually exclusive per view: a masking view with `security_invoker` either fails with permission errors or forces the base-table grant it exists to avoid.
-- Alias every output column explicitly; no `SELECT *` in a view body (see [SELECT structure and join style](select-structure-and-join-style.md)).
+- Alias every output column explicitly; no `SELECT *` in a view body, where column changes underneath silently change the contract (see [SELECT structure and join style](select-structure-and-join-style.md)).
 - Write view bodies with the same CTE decomposition rules as queries.
 - Use a materialized view only when the underlying query is measured-too-slow for live reads; document the refresh strategy (what refreshes it, how often, acceptable staleness) in the migration.
 - Create the unique index every materialized view needs for `REFRESH MATERIALIZED VIEW CONCURRENTLY`, and refresh concurrently.
@@ -28,7 +28,6 @@ Views are a public contract over the schema: cheap to create, expensive to evolv
 - Do not stack views on views; one level deep.
 - Do not create a materialized view without a refresh plan; it is a cache with no invalidation.
 - Do not write through updatable views; write to tables.
-- Do not use `SELECT *` in view bodies; column changes underneath silently change the contract.
 
 ## Example
 

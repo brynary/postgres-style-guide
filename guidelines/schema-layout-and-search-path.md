@@ -30,16 +30,13 @@ One schema keeps DDL, tooling, and queries simple; the real risks are unprivileg
 -- One-time database setup:
 REVOKE CREATE ON SCHEMA public FROM PUBLIC;
 
--- Function with pinned path; name resolution cannot be hijacked:
+-- Every function definition pins its path; name resolution cannot be
+-- hijacked. Body elided; full definitions live with their owner pages
+-- (set_updated_at in triggers, normalize_email in functions).
 CREATE FUNCTION set_updated_at() RETURNS trigger
 LANGUAGE plpgsql
 SET search_path = public, pg_temp
-AS $$
-BEGIN
-  NEW.updated_at := now();
-  RETURN NEW;
-END;
-$$;
+AS $$ ... $$;
 ```
 
 ## Exceptions

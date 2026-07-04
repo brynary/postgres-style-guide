@@ -25,6 +25,7 @@ Use these instructions when turning the outline into guideline pages.
 
 - Use [TEMPLATE.md](TEMPLATE.md) for every guideline page.
 - Give every rule exactly one owner page; sibling pages may carry at most a one-line reminder that links to the owner.
+- The review workflow's checklist derives from guideline pages; a policy change that adds or removes a ban must update it in the same change.
 - Make examples demonstrate only the owning page's rules; incidental SQL in an example follows other pages' rules but does not showcase them.
 - Make the `Rule` section a direct default, not a discussion.
 - Keep `Why` short and practical.

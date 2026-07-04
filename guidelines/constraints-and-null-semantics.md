@@ -46,7 +46,7 @@ CREATE TABLE subscriptions (
 
 ## Migration Notes
 
-- Adding `NOT NULL` or a `CHECK` to a large existing table: add as `NOT VALID`, backfill, then `VALIDATE CONSTRAINT`; see the safe schema migration workflow. PG18 supports `NOT VALID` for `NOT NULL` directly.
+- Adding `NOT NULL` or a `CHECK` to a large existing table: add as `NOT VALID`, backfill, then `VALIDATE CONSTRAINT`; the procedure and its version notes live in the safe schema migration workflow.
 
 ## Exceptions
 

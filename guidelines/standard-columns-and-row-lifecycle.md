@@ -29,7 +29,7 @@ Uniform lifecycle columns make debugging, syncing, and auditing possible everywh
 - Do not maintain `updated_at` from application code; any write path outside the ORM silently leaves it stale.
 - Do not add `deleted_at` to tables "just in case"; unpaired with partial unique indexes and query scoping it is a latent bug, and history without a consumer is dead weight.
 - Do not mix soft- and hard-delete semantics for the same table.
-- Do not maintain derived values with update triggers or application writes when a generated column can express them.
+- Do not reach for a derivation trigger or application writes when a generated column can express the rule; the constraint -> generated column -> trigger escalation lives in [triggers](triggers.md).
 - Do not index a virtual generated column; PostgreSQL requires `STORED` for that.
 
 ## Example

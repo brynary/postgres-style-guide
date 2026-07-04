@@ -23,7 +23,7 @@ Use this skill to apply the project's PostgreSQL style conventions while designi
 | Stand up a new database | [workflows/new-database-setup.md](workflows/new-database-setup.md), [guidelines.md](guidelines.md) |
 | Investigate a slow query | [workflows/query-performance-investigation.md](workflows/query-performance-investigation.md), [guidelines.md](guidelines.md) |
 | Review a migration or schema PR | [workflows/schema-and-query-review.md](workflows/schema-and-query-review.md), [guidelines.md](guidelines.md) |
-| Design a new table | [guidelines.md](guidelines.md), object naming, primary keys, scalar types, constraints, standard columns |
+| Design a new table | [guidelines.md](guidelines.md), object naming, primary keys, foreign keys, scalar types, constraints, standard columns |
 | Choose a primary key or ID type | [guidelines.md](guidelines.md), primary keys and row identity |
 | Model a status or category field | [guidelines.md](guidelines.md), enums/domains/lookup tables, constraints and NULL semantics |
 | Decide between columns and jsonb | [guidelines.md](guidelines.md), JSONB/arrays/normalization, advanced indexes |

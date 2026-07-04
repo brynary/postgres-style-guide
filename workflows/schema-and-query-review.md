@@ -4,10 +4,12 @@ Use this workflow when reviewing a migration, a schema design, or SQL changes in
 
 ## Required Guidelines
 
-Load [guidelines.md](../guidelines.md), then load the guideline pages matching what the change touches. Always include for schema changes:
+Load [guidelines.md](../guidelines.md), then load the guideline pages matching what the change touches. For schema changes, always include the new-table page set from [SKILL.md](../SKILL.md)'s routing table:
 
 - [Object naming](../guidelines/object-naming.md)
 - [Primary keys and row identity](../guidelines/primary-keys-and-row-identity.md)
+- [Foreign keys and relationships](../guidelines/foreign-keys-and-relationships.md)
+- [Scalar types](../guidelines/scalar-types.md)
 - [Constraints and NULL semantics](../guidelines/constraints-and-null-semantics.md)
 - [Standard columns and row lifecycle](../guidelines/standard-columns-and-row-lifecycle.md)
 
@@ -33,7 +35,7 @@ And for query changes:
 
 - Every new FK has an index and an explicit `ON DELETE` action.
 - Every constraint and index is explicitly named per the suffix scheme.
-- No `serial`, `varchar(n)`, `char(n)`, `money`, `timestamp without time zone`, `json`, or `CREATE DOMAIN` in new DDL.
+- No `serial`/`bigserial`, `gen_random_uuid()` primary keys, `varchar(n)`, `char(n)`, `money`, `timestamp without time zone`, `json`, or `CREATE DOMAIN` in new DDL.
 - New columns are `NOT NULL` or the nullability is meaningful.
 - Durable tables carry `created_at`/`updated_at` and the `set_updated_at` trigger.
 - No unqualified `UPDATE`/`DELETE`; writes needing results use `RETURNING`.

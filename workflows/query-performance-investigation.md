@@ -33,9 +33,8 @@ Load [guidelines.md](../guidelines.md), then load these guideline pages as neede
 ```sql
 EXPLAIN (ANALYZE, BUFFERS) SELECT ...;
 
--- EXPLAIN (ANALYZE) executes DML; never run it bare against live data:
 BEGIN;
-EXPLAIN (ANALYZE, BUFFERS) UPDATE ...;
+EXPLAIN (ANALYZE, BUFFERS) UPDATE ...;  -- DML baseline per step 2
 ROLLBACK;
 
 -- Statement-level view of what is actually slow:

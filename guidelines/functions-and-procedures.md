@@ -49,4 +49,4 @@ CREATE UNIQUE INDEX users_normalized_email_key
 ## Exceptions
 
 - Batch maintenance procedures with explicit transaction control are legitimate; keep them in migrations or documented maintenance scripts, not hidden in application flows.
-- `SECURITY DEFINER` is required for controlled privilege elevation (for example, letting the read-only role refresh one materialized view); isolate, pin `search_path`, revoke `PUBLIC` execute, and review with [roles, privileges, and row-level security](roles-privileges-and-row-level-security.md).
+- `SECURITY DEFINER` is required for controlled privilege elevation (for example, letting the read-only role refresh one materialized view); apply the full hardening from Do above and review with [roles, privileges, and row-level security](roles-privileges-and-row-level-security.md).

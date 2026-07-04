@@ -48,8 +48,7 @@ Guideline pages are policy. Do not load every guideline page by default.
 
 ## Routing Notes
 
-Workflow dispatch lives in [SKILL.md](SKILL.md); these notes only cover which guideline pages to combine.
+Task-to-page dispatch lives in [SKILL.md](SKILL.md)'s routing table; these notes only cover cross-cutting co-loads.
 
-- For new tables, always include object naming, primary keys, constraints, and standard columns.
 - For anything touching `SECURITY DEFINER`, grants, or multi-tenant data, include roles/privileges/RLS.
 - For advanced topics like triggers, materialized views, or RLS, load the page only when the task directly needs it.
