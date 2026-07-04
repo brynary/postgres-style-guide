@@ -1,0 +1,12 @@
+[book]
+title = "PostgreSQL Style Guide"
+description = "Opinionated PostgreSQL style guidance for AI coding agents."
+language = "en"
+src = "src"
+
+[build]
+build-dir = "book"
+create-missing = false
+
+[preprocessor.strip-frontmatter]
+command = "python3 checks/strip_frontmatter.py"

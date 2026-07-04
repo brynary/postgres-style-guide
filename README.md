@@ -39,6 +39,19 @@ The guide is production-first PostgreSQL 18+ with an app-first posture:
 5. Run `bash checks/check.sh` before committing skill changes.
 6. Use [DRAFTING.md](DRAFTING.md) and [TEMPLATE.md](TEMPLATE.md) only when adding or reshaping pages.
 
+## mdBook
+
+The guide can be built as an mdBook for browsing:
+
+```sh
+mdbook build
+mdbook serve --open
+```
+
+Book source lives under [src/](src). The book source uses symlinks to expose packaged skill files without duplicating the canonical copies at the repository root, and a preprocessor strips SKILL.md's frontmatter from the rendered book.
+
+GitHub Pages deployment is handled by [.github/workflows/deploy.yml](.github/workflows/deploy.yml). For first-time setup, set the repository's Pages source to "GitHub Actions" under Settings > Pages. Pushes to `main` will build the book and deploy the generated `book/` output.
+
 ## Packaging Model
 
 The skill uses progressive disclosure:
