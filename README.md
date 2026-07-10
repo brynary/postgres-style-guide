@@ -8,10 +8,7 @@ This repository contains a PostgreSQL style guide packaged as a skill for AI cod
 - [guidelines.md](guidelines.md): guideline index for the packaged skill.
 - [guidelines/](guidelines): focused PostgreSQL style policy pages.
 - [workflows/](workflows): procedural workflows for larger tasks.
-- [OUTLINE.md](OUTLINE.md): the guideline map used to draft the guide.
-- [DECISIONS.md](DECISIONS.md): resolved style decision register.
-- [DRAFTING.md](DRAFTING.md): drafting order, page rules, and scope rules.
-- [TEMPLATE.md](TEMPLATE.md): the required format for each guideline page.
+- [authoring/DRAFTING.md](authoring/DRAFTING.md): maintenance entrypoint for decisions, ownership, and page shape.
 - [AGENTS.md](AGENTS.md): repository instructions for AI coding agents.
 
 ## Research
@@ -28,14 +25,9 @@ The guide is production-first PostgreSQL 18+ with an app-first posture:
 - Treat schema changes to live databases as production changes with strict lock discipline.
 - Keep migration guidance stricter than greenfield DDL guidance.
 
-## Workflow
+## Maintenance
 
-1. Update [DECISIONS.md](DECISIONS.md) when policy changes.
-2. Update the relevant page under [guidelines/](guidelines) or [workflows/](workflows).
-3. Keep [guidelines.md](guidelines.md) linked to every packaged guideline page.
-4. Keep [SKILL.md](SKILL.md) small and route through progressive disclosure.
-5. Run `bash checks/check.sh` before committing skill changes.
-6. Use [DRAFTING.md](DRAFTING.md) and [TEMPLATE.md](TEMPLATE.md) only when adding or reshaping pages.
+Start with [authoring/DRAFTING.md](authoring/DRAFTING.md). It routes to the decision register, ownership map, and page template. Run `bash checks/check.sh` before committing skill changes.
 
 ## mdBook
 
