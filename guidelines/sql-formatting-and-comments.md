@@ -33,16 +33,16 @@ A single mechanical layout makes agent-generated SQL diff-stable and reviewable.
 
 ```sql
 SELECT
-  u.id,
-  u.email,
+  usr.id,
+  usr.email,
   SUM(oi.quantity * oi.unit_price) AS lifetime_value
-FROM users u
-JOIN orders o ON o.user_id = u.id
-JOIN order_items oi ON oi.order_id = o.id
-WHERE o.state = 'paid'
-  AND o.created_at >= date_trunc('year', now())
-GROUP BY u.id, u.email
-ORDER BY lifetime_value DESC, u.id
+FROM users usr
+JOIN orders ord ON ord.user_id = usr.id
+JOIN order_items oi ON oi.order_id = ord.id
+WHERE ord.state = 'paid'
+  AND ord.created_at >= date_trunc('year', now())
+GROUP BY usr.id, usr.email
+ORDER BY lifetime_value DESC, usr.id
 LIMIT 20;
 ```
 

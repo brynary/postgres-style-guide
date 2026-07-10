@@ -3,9 +3,10 @@
 
 Checks:
 - local Markdown links resolve within the packaged skill files
-- guidelines.md lists every guideline page
-- the SKILL.md router lists every workflow page
-- guideline and workflow pages contain required sections
+- guidelines.md lists every guideline exactly once and no workflows
+- SKILL.md lists every workflow exactly once
+- guideline, conditional-page, workflow, and router sections are present
+- guideline pages do not exceed the size budget
 - SQL code fences are closed and non-empty
 """
 
@@ -15,23 +16,25 @@ import re
 import sys
 
 
-GUIDELINE_SECTIONS = (
-    "## Rule",
-    "## Why",
-    "## Do",
-    "## Avoid",
-    "## Example",
-    "## Exceptions",
-)
+GUIDELINE_SECTIONS = ("## Rule",)
+
+CONDITIONAL_GUIDELINES = {
+    "advanced-indexes.md",
+    "functions-and-procedures.md",
+    "roles-privileges-and-row-level-security.md",
+    "triggers.md",
+    "views-and-materialized-views.md",
+}
 
 WORKFLOW_SECTIONS = (
-    "## Required Guidelines",
+    "## Guideline Routing",
     "## Workflow",
-    "## Avoid",
 )
 
+MAX_GUIDELINE_LINES = 100
+
 ROUTER_SECTIONS = {
-    "SKILL.md": ("## Supporting Files", "## Routing Examples", "## Core Behavior"),
+    "SKILL.md": ("## Routing", "## Core Behavior"),
 }
 
 LINK_RE = re.compile(r"(?<!!)\[[^\]]+\]\(([^)]+)\)")
@@ -146,13 +149,27 @@ def validate_guidelines(root, result):
         rel = relative(root, path)
         text = read(path)
         validate_required_sections(root, path, text, GUIDELINE_SECTIONS, result)
-        if f"]({rel})" not in index:
+        if path.name in CONDITIONAL_GUIDELINES:
+            validate_required_sections(root, path, text, ("## Activation",), result)
+        line_count = len(text.splitlines())
+        if line_count > MAX_GUIDELINE_LINES:
+            result.errors.append(
+                f"{rel}: {line_count} lines exceeds {MAX_GUIDELINE_LINES}-line limit"
+            )
+        link_count = len(re.findall(rf"\]\({re.escape(rel)}(?:#[^)]+)?\)", index))
+        if link_count == 0:
             result.errors.append(f"guidelines.md does not list {rel}")
+        elif link_count > 1:
+            result.errors.append(f"guidelines.md lists {rel} more than once")
 
     linked = set(re.findall(r"\]\((guidelines/[^)#]+\.md)(?:#[^)]+)?\)", index))
     existing = {relative(root, path) for path in guideline_files}
     for rel in sorted(linked - existing):
         result.errors.append(f"guidelines.md lists missing guideline {rel}")
+
+    workflow_links = sorted(set(re.findall(r"\]\((workflows/[^)#]+\.md)(?:#[^)]+)?\)", index)))
+    for rel in workflow_links:
+        result.errors.append(f"guidelines.md must not link workflow {rel}")
 
 
 def validate_workflows(root, result):
@@ -163,8 +180,11 @@ def validate_workflows(root, result):
         rel = relative(root, path)
         text = read(path)
         validate_required_sections(root, path, text, WORKFLOW_SECTIONS, result)
-        if f"]({rel})" not in skill_text:
+        link_count = len(re.findall(rf"\]\({re.escape(rel)}(?:#[^)]+)?\)", skill_text))
+        if link_count == 0:
             result.errors.append(f"SKILL.md does not link {rel}")
+        elif link_count > 1:
+            result.errors.append(f"SKILL.md links {rel} more than once")
 
 
 def validate_routers(root, result):

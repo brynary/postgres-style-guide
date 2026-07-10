@@ -16,10 +16,10 @@ Uniform lifecycle columns make debugging, syncing, and auditing possible everywh
 - Maintain `updated_at` with the shared `set_updated_at()` trigger on every such table; the trigger pattern lives in [triggers](triggers.md).
 - Hard-delete rows with `DELETE`; rely on `ON DELETE RESTRICT` (see [foreign keys and relationships](foreign-keys-and-relationships.md)) to surface dependents.
 - Where the product genuinely needs recovery or audit history, use `deleted_at timestamptz` soft delete on that table, and then always:
-  - convert unique constraints to partial unique indexes: `CREATE UNIQUE INDEX ... WHERE deleted_at IS NULL` — noting that partial unique indexes cannot be foreign-key targets, so restructure any FK that referenced the constraint first;
-  - decide and document the child-row policy: soft delete never issues `DELETE`, so `ON DELETE RESTRICT` will not surface dependents — either cascade the soft delete in the application, block it while dependents exist, or restrict soft delete to leaf tables;
+  - enforce active-row uniqueness with partial indexes, per [index basics](index-basics.md);
+  - define the child-row policy, because soft deletion does not activate FK delete actions;
   - scope application queries to `deleted_at IS NULL`;
-  - repeat the index predicate in upsert conflict targets; see [DML, upserts, and RETURNING](dml-upserts-and-returning.md);
+  - include the active-row predicate in upserts, per [DML, upserts, and RETURNING](dml-upserts-and-returning.md);
   - define a purge/retention job.
 - Use generated columns for values derived from the same row; virtual by default, `STORED` when the column is indexed, hot on the read path, expensive to compute, or must flow through logical replication.
 - Give business defaults with `DEFAULT` at the column (`state text NOT NULL DEFAULT 'pending'`).
@@ -39,10 +39,6 @@ CREATE TABLE documents (
   id uuid DEFAULT uuidv7() PRIMARY KEY,
   title text NOT NULL,
   body text NOT NULL,
-  -- Cheap derivation, never indexed: virtual (PG18 default).
-  word_count bigint GENERATED ALWAYS AS
-    (array_length(regexp_split_to_array(body, '\s+'), 1)),
-  deleted_at timestamptz,
   created_at timestamptz NOT NULL DEFAULT now(),
   updated_at timestamptz NOT NULL DEFAULT now()
 );
@@ -50,10 +46,6 @@ CREATE TABLE documents (
 CREATE TRIGGER documents_set_updated_at_trigger
   BEFORE UPDATE ON documents
   FOR EACH ROW EXECUTE FUNCTION set_updated_at();
-
--- Soft delete requires partial uniqueness:
-CREATE UNIQUE INDEX documents_title_key
-  ON documents (title) WHERE deleted_at IS NULL;
 ```
 
 ## Version Notes

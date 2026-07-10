@@ -2,9 +2,9 @@
 
 Use this workflow when reviewing a migration, a schema design, or SQL changes in a pull request, or when refactoring existing database code toward the guidelines.
 
-## Required Guidelines
+## Guideline Routing
 
-Load [guidelines.md](../guidelines.md), then load the guideline pages matching what the change touches. For schema changes, always include the new-table page set from [SKILL.md](../SKILL.md)'s routing table:
+Load only the pages matching the changed surface. For schema changes, always include:
 
 - [Object naming](../guidelines/object-naming.md)
 - [Primary keys and row identity](../guidelines/primary-keys-and-row-identity.md)
@@ -34,7 +34,7 @@ And for query changes:
 ## Review Checklist
 
 - Every new FK has an index and an explicit `ON DELETE` action.
-- Every constraint and index is explicitly named per the suffix scheme.
+- Every constraint and index has the canonical suffix name; noncanonical generated names are overridden explicitly.
 - No `serial`/`bigserial`, `gen_random_uuid()` primary keys, `varchar(n)`, `char(n)`, `money`, `timestamp without time zone`, `json`, or `CREATE DOMAIN` in new DDL.
 - New columns are `NOT NULL` or the nullability is meaningful.
 - Durable tables carry `created_at`/`updated_at` and the `set_updated_at` trigger.

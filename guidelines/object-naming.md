@@ -2,7 +2,7 @@
 
 ## Rule
 
-Name tables as plural nouns, columns by fixed conventions (`id`, `<referenced_singular>_id`, `*_at`, `is_*`), and name every constraint and index explicitly using the PostgreSQL default suffix scheme.
+Name tables as plural nouns, columns by fixed conventions (`id`, `<referenced_singular>_id`, `*_at`, `is_*`), and give constraints and indexes canonical PostgreSQL suffix names.
 
 ## Why
 
@@ -17,18 +17,19 @@ Systematic names make agent-generated DDL predictable: any object's name can be 
 - Suffix timestamps with `_at` (`created_at`, `confirmed_at`) and dates with `_on` or a plain noun (`due_on`, `birth_date`).
 - Prefix booleans with `is_` or `has_` (`is_active`, `has_signature`).
 - Prefer descriptive column names over generic ones: `year_founded`, not `year`.
-- Name constraints and indexes explicitly, matching the PostgreSQL auto-generated pattern:
+- Use the PostgreSQL default suffix pattern for constraints and indexes:
   - Primary key: `{table}_pkey`
   - Foreign key: `{table}_{column}_fkey`
   - Unique constraint or unique index: `{table}_{columns}_key`
   - Ordinary index: `{table}_{columns}_idx`
   - Check constraint: `{table}_{column}_check` (or `{table}_{rule}_check` for multi-column rules)
+- Let PostgreSQL supply a constraint name only when it will generate the canonical name above unambiguously; otherwise use `CONSTRAINT name`. Index names are always explicit.
 - Name triggers `{table}_{action}_trigger` (`users_set_updated_at_trigger`) and their functions after the behavior (`set_updated_at`).
 - Name views as plural nouns describing the result rows (`overdue_invoices`); name materialized views the same way.
 
 ## Avoid
 
-- Do not rely on auto-generated constraint or index names; creation order can differ across environments.
+- Do not accept a generated constraint name with a numeric disambiguator or noncanonical suffix; name that constraint explicitly.
 - Do not use `tbl_`, `col_`, `fk_`, `idx_` prefixes or other Hungarian notation.
 - Do not name a junction table `a_to_b` or `a_b_join`.
 - Do not encode types into names (`name_text`, `count_int`).
@@ -59,4 +60,4 @@ CREATE INDEX order_items_product_id_idx ON order_items (product_id);
 
 - Names that would exceed 63 bytes: shorten the column list portion while keeping the table name and suffix intact.
 - Legacy tables with established singular names: match the surrounding convention within that table rather than mixing styles.
-- Schemas managed by an ORM whose migration tool auto-names constraints and indexes (Rails, Django): follow the surrounding ORM convention for new objects, passing explicit names only where the ORM would generate a nondeterministic or truncated name. The suffix scheme above applies in full to greenfield and hand-written-SQL schemas.
+- Schemas managed by an ORM (Rails, Django): follow its surrounding naming convention, overriding only nondeterministic or truncated names.

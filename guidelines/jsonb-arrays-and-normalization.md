@@ -17,7 +17,7 @@ Data inside `jsonb` loses what the database provides: type checking, constraints
 - Use arrays only for flat lists of primitives with no FK targets and no per-element metadata (`tags text[]`).
 - Reach for a child or junction table the moment list elements reference another table or carry attributes.
 - Query `jsonb` and arrays with containment operators; the operator idioms and GIN indexing rules live in [advanced indexes](advanced-indexes.md).
-- Validate required `jsonb` structure with a `CHECK` when a key is load-bearing: `CHECK (payload ? 'event_type')`.
+- Validate load-bearing `jsonb` structure with a named check, for example `CONSTRAINT webhooks_payload_check CHECK (payload ? 'event_type')`.
 
 ## Avoid
 

@@ -8,10 +8,7 @@ Keep the work simple, explicit, and useful for agents. Do not turn the guide int
 
 ## Key Files
 
-- [OUTLINE.md](OUTLINE.md): guideline map for the full style guide.
-- [DECISIONS.md](DECISIONS.md): resolved style decision register.
-- [DRAFTING.md](DRAFTING.md): drafting order, scope rules, and page-writing guidance.
-- [TEMPLATE.md](TEMPLATE.md): required guideline page format.
+- [authoring/DRAFTING.md](authoring/DRAFTING.md): maintenance entrypoint for decisions, ownership, and page shape.
 - [SKILL.md](SKILL.md): skill entrypoint and root router.
 - [guidelines.md](guidelines.md): guideline index for progressive disclosure.
 - [guidelines/](guidelines): focused PostgreSQL style policy pages.
@@ -21,13 +18,10 @@ Keep the work simple, explicit, and useful for agents. Do not turn the guide int
 
 ## Working Rules
 
-- Read [DECISIONS.md](DECISIONS.md) before drafting or changing policy pages; add or amend a register entry before changing policy.
-- Use [TEMPLATE.md](TEMPLATE.md) for every guideline page.
-- Follow [DRAFTING.md](DRAFTING.md) for drafting order, scope, and the one-owner-per-rule principle.
+- Follow [authoring/DRAFTING.md](authoring/DRAFTING.md) when maintaining the guide; it routes to the decision register, ownership map, and page template.
 - Keep guideline pages short, concrete, and mechanical enough for an agent to follow.
-- Put unresolved choices in `Decision Points` instead of hiding them in prose.
 - Keep [SKILL.md](SKILL.md) small. Put detailed policy in `guidelines/` and procedures in `workflows/`.
-- Link guideline and workflow files directly from [SKILL.md](SKILL.md) or [guidelines.md](guidelines.md); avoid deep reference chains.
+- Link each workflow exactly once from [SKILL.md](SKILL.md) and each guideline exactly once from [guidelines.md](guidelines.md); use direct guideline links in `SKILL.md` only for policy fast paths.
 - Run `bash checks/check.sh` before committing skill changes.
 - Do not edit files in [.ai/research/](.ai/research) unless explicitly asked.
 
@@ -46,5 +40,4 @@ The intended guide is production-first PostgreSQL 18+ with an app-first posture:
 - Preserve ASCII-only markdown unless a file already uses non-ASCII intentionally.
 - Keep changes narrowly scoped to the requested document.
 - Avoid adding new guideline or workflow files unless the user asks for new pages.
-- When adding or changing decisions, update [DECISIONS.md](DECISIONS.md) and keep topic references in [OUTLINE.md](OUTLINE.md) consistent.
 - Do not include planning docs or research reports in the packaged skill unless explicitly requested.

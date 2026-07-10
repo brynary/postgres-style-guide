@@ -1,8 +1,6 @@
 # Guidelines
 
-Load this file for PostgreSQL style policy, then load only the guideline pages needed for the task.
-
-Guideline pages are policy. Do not load every guideline page by default.
+Use page descriptions to select pages before loading them. After loading a conditional page, apply it only when its `Activation` section matches.
 
 ## Foundations
 
@@ -45,10 +43,3 @@ Guideline pages are policy. Do not load every guideline page by default.
 ## Security
 
 - [Roles, privileges, and row-level security](guidelines/roles-privileges-and-row-level-security.md) - load when configuring roles, grants, default privileges, or RLS.
-
-## Routing Notes
-
-Task-to-page dispatch lives in [SKILL.md](SKILL.md)'s routing table; these notes only cover cross-cutting co-loads.
-
-- For anything touching `SECURITY DEFINER`, grants, or multi-tenant data, include roles/privileges/RLS.
-- For advanced topics like triggers, materialized views, or RLS, load the page only when the task directly needs it.

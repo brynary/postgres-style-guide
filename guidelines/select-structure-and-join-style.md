@@ -22,7 +22,7 @@ Explicit joins keep the relationship between tables visible where it happens. Qu
 
 - Do not use comma joins (`FROM a, b WHERE ...`).
 - Do not use `NATURAL JOIN`; it silently re-matches when columns are added.
-- Do not use `SELECT *` in application SQL; acceptable only ad hoc, in `EXISTS (SELECT 1 ...)` bodies, and as `count(*)`.
+- Do not use `SELECT *` in committed application SQL; it is acceptable only for ad hoc exploration. Use `SELECT 1` inside `EXISTS`, and `count(*)` for row counts.
 - Do not use `RIGHT JOIN`; reorder the tables and use `LEFT JOIN`.
 - Do not leave columns unqualified in multi-table queries; an added column in another table can make them ambiguous or, worse, silently re-bind.
 

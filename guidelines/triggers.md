@@ -2,7 +2,7 @@
 
 ## Activation
 
-Load this page when creating or reviewing any trigger, or when deciding how audit trails or derived data should be maintained.
+Apply this page when creating or reviewing any trigger, or when deciding how audit trails or derived data should be maintained.
 
 ## Rule
 
@@ -20,7 +20,7 @@ Triggers run no matter which path wrote the row — ORM, psql, script, another s
 - Prefer, in order: constraint, then generated column, then trigger; a trigger is the tool when the first two cannot express the rule.
 - Use `BEFORE` triggers to adjust the row being written (`updated_at`), `AFTER` triggers to record side effects (audit rows, counters).
 - Keep each trigger function small and single-purpose; one behavior per trigger.
-- Name triggers `{table}_{action}_trigger` per [object naming](object-naming.md), and pin `search_path` in trigger functions per [functions and procedures](functions-and-procedures.md).
+- Name triggers `{table}_{action}_trigger` per [object naming](object-naming.md), and pin trigger-function paths per [schema layout and search_path](schema-layout-and-search-path.md).
 - Comment every trigger with what invariant or bookkeeping it maintains.
 
 ## Avoid

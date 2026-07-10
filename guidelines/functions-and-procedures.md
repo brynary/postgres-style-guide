@@ -2,15 +2,15 @@
 
 ## Activation
 
-Load this page when writing or reviewing any `CREATE FUNCTION`/`CREATE PROCEDURE`, including trigger functions. If the task is deciding whether logic belongs in the database at all, start with [house style and Postgres philosophy](house-style-and-postgres-philosophy.md).
+Apply this page when writing or reviewing any `CREATE FUNCTION`/`CREATE PROCEDURE`, including trigger functions. If the task is deciding whether logic belongs in the database at all, start with [house style and Postgres philosophy](house-style-and-postgres-philosophy.md).
 
 ## Rule
 
-Keep database functions few and small, label each with the strictest correct volatility, default to `SECURITY INVOKER`, and pin `search_path` in every definition.
+Keep database functions few and small, label each with the strictest correct volatility, and default to `SECURITY INVOKER`.
 
 ## Why
 
-Database functions are harder to test, version, and debug than application code, and they carry optimizer and security contracts: a mislabeled volatility returns stale results, and an unpinned `search_path` lets callers hijack name resolution.
+Database functions are harder to test and debug than application code, and a mislabeled volatility gives the optimizer a false contract.
 
 ## Do
 
@@ -18,8 +18,8 @@ Database functions are harder to test, version, and debug than application code,
 - Use plain `LANGUAGE sql` when the body is a single statement; reserve `plpgsql` for control flow. (A function with a pinned `search_path` is never inlined into calling queries, so this choice buys clarity, not performance.)
 - Label the strictest correct volatility: `IMMUTABLE` only for pure functions of their arguments; `STABLE` for anything reading tables; `VOLATILE` when it writes or depends on changing state.
 - Declare `STRICT` (returns NULL on NULL input) when that is the real contract; it saves the null-handling boilerplate.
-- Keep `SECURITY INVOKER` (the default); use `SECURITY DEFINER` only for a specific privilege boundary, with `search_path` pinned, inputs treated as hostile, and the default world access removed: `REVOKE EXECUTE ON FUNCTION ... FROM PUBLIC`, then `GRANT EXECUTE` to the one role the boundary is for (PostgreSQL grants execution to `PUBLIC` by default).
-- Pin `SET search_path = public, pg_temp` on every function, per [schema layout and search_path](schema-layout-and-search-path.md).
+- Keep `SECURITY INVOKER` (the default). Use `SECURITY DEFINER` only for a specific privilege boundary; treat inputs as hostile, revoke default `PUBLIC` execution, and grant only the intended role.
+- Apply the mandatory path pinning and qualification rules from [schema layout and search_path](schema-layout-and-search-path.md).
 - Use a procedure (`CREATE PROCEDURE` + `CALL`) only when the body genuinely needs transaction control (batched maintenance with periodic `COMMIT`).
 - Name functions after their behavior (`set_updated_at`, `normalize_email`), per [object naming](object-naming.md).
 

@@ -5,37 +5,43 @@ description: Apply this PostgreSQL style guide when designing schemas, writing q
 
 # PostgreSQL Style Guide
 
-Use this skill to apply the project's PostgreSQL style conventions while designing schemas, writing queries, authoring migrations, or configuring database access.
+Apply the loaded policy pages directly.
 
-## Supporting Files
+## Routing
 
-- [guidelines.md](guidelines.md) - index of PostgreSQL style policy pages. Load this for ordinary SQL and schema work, then load only the guideline pages relevant to the task.
-- [workflows/safe-schema-migration.md](workflows/safe-schema-migration.md) - workflow for changing schemas on existing databases without downtime: expand/contract, concurrent indexes, staged constraints, and backfills.
-- [workflows/new-database-setup.md](workflows/new-database-setup.md) - workflow for standing up a new database: schemas, roles, default privileges, and migration structure.
-- [workflows/query-performance-investigation.md](workflows/query-performance-investigation.md) - workflow for diagnosing and fixing slow queries with EXPLAIN and index evaluation.
-- [workflows/schema-and-query-review.md](workflows/schema-and-query-review.md) - workflow for reviewing or refactoring existing schemas, migrations, and queries.
-
-## Routing Examples
+### Workflows
 
 | Task | Load |
 | --- | --- |
-| Create or alter a table on a live database | [workflows/safe-schema-migration.md](workflows/safe-schema-migration.md), [guidelines.md](guidelines.md) |
-| Stand up a new database | [workflows/new-database-setup.md](workflows/new-database-setup.md), [guidelines.md](guidelines.md) |
-| Investigate a slow query | [workflows/query-performance-investigation.md](workflows/query-performance-investigation.md), [guidelines.md](guidelines.md) |
-| Review a migration or schema PR | [workflows/schema-and-query-review.md](workflows/schema-and-query-review.md), [guidelines.md](guidelines.md) |
-| Design a new table | [guidelines.md](guidelines.md), object naming, primary keys, foreign keys, scalar types, constraints, standard columns |
-| Choose a primary key or ID type | [guidelines.md](guidelines.md), primary keys and row identity |
-| Model a status or category field | [guidelines.md](guidelines.md), enums/domains/lookup tables, constraints and NULL semantics |
-| Decide between columns and jsonb | [guidelines.md](guidelines.md), JSONB/arrays/normalization, advanced indexes |
-| Write a multi-step or reporting query | [guidelines.md](guidelines.md), CTEs, join style, aggregation and pagination |
-| Write an upsert or bulk write | [guidelines.md](guidelines.md), DML/upserts/RETURNING |
-| Add an index | [guidelines.md](guidelines.md), index basics; advanced indexes only for partial/expression/GIN/covering forms |
-| Add a function, trigger, or view | [guidelines.md](guidelines.md), then only the matching page (functions, triggers, or views) |
-| Configure roles or grants | [guidelines.md](guidelines.md), roles/privileges/RLS |
+| Change a live database schema | [safe migration workflow](workflows/safe-schema-migration.md) |
+| Stand up a new database | [database setup workflow](workflows/new-database-setup.md) |
+| Investigate a slow query | [performance workflow](workflows/query-performance-investigation.md) |
+| Review schema, migration, or query changes | [review workflow](workflows/schema-and-query-review.md) |
+
+### Policy Fast Paths
+
+| Task | Load |
+| --- | --- |
+| Design a new table | [object naming](guidelines/object-naming.md), [primary keys](guidelines/primary-keys-and-row-identity.md), [foreign keys](guidelines/foreign-keys-and-relationships.md), [scalar types](guidelines/scalar-types.md), [constraints](guidelines/constraints-and-null-semantics.md), [standard columns](guidelines/standard-columns-and-row-lifecycle.md) |
+| Choose a primary key or ID type | [primary keys and row identity](guidelines/primary-keys-and-row-identity.md) |
+| Model a status or category | [enums/domains/lookups](guidelines/enums-domains-and-lookup-tables.md), [constraints](guidelines/constraints-and-null-semantics.md) |
+| Choose columns, JSONB, or arrays | [JSONB and normalization](guidelines/jsonb-arrays-and-normalization.md), [advanced indexes](guidelines/advanced-indexes.md) |
+| Write a multi-step or reporting query | [CTEs](guidelines/ctes-and-query-decomposition.md), [join style](guidelines/select-structure-and-join-style.md), [aggregation and pagination](guidelines/aggregation-window-functions-and-pagination.md) |
+| Write an upsert or bulk write | [DML and upserts](guidelines/dml-upserts-and-returning.md) |
+| Add an index | [index basics](guidelines/index-basics.md), plus [advanced indexes](guidelines/advanced-indexes.md) for partial, expression, multicolumn, covering, GIN, JSONB, array, or range indexes |
+| Add a database function | [functions and procedures](guidelines/functions-and-procedures.md) |
+| Add a trigger | [triggers](guidelines/triggers.md) |
+| Add a view or materialized view | [views and materialized views](guidelines/views-and-materialized-views.md) |
+| Configure roles, grants, or RLS | [roles, privileges, and RLS](guidelines/roles-privileges-and-row-level-security.md) |
+| Other PostgreSQL policy work | [guideline index](guidelines.md) |
 
 ## Core Behavior
 
-- Load only the pages the task needs; guideline pages are the policy, workflow pages are the procedures.
+- Workflows own multi-step procedures and route to their policy pages.
+- Fast paths load only the directly linked owner pages.
+- Use the guideline index only when no workflow or fast path matches.
+- Select conditional pages using task descriptions in this router, the guideline index, or workflow routing.
+- After loading a conditional page, apply it only when its `Activation` section matches.
+- Treat live-database migrations as stricter than greenfield DDL.
 - Prefer concrete PostgreSQL guidance over SQL tutorials.
-- Treat migrations on existing databases as stricter than greenfield DDL; when a schema change targets a live database, load the safe schema migration workflow before individual DDL guidelines.
-- Apply the loaded rules directly. Ask one focused question only when required project context is missing.
+- Ask one focused question only when required project context is missing.

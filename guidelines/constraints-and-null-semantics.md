@@ -24,7 +24,7 @@ Nullable-by-default schemas leak three-valued logic into every query. Constraint
 - Do not re-implement a `CHECK`-expressible rule as a trigger or app-only validation.
 - Do not write multi-row or cross-table rules as `CHECK` constraints; they only see the row at hand and give false confidence.
 - Do not forget that plain `UNIQUE` treats NULLs as distinct: multiple rows with NULL pass; make the choice explicit where it matters.
-- Do not use unnamed constraints; see [object naming](object-naming.md).
+- Do not keep noncanonical generated constraint names; see [object naming](object-naming.md).
 
 ## Example
 

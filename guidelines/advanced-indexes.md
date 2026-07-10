@@ -2,7 +2,7 @@
 
 ## Activation
 
-Load this page when a partial, expression, multicolumn, covering (`INCLUDE`), or GIN index is proposed, or when indexing `jsonb`, arrays, or ranges. For ordinary single-column B-trees and FK indexing, [index basics](index-basics.md) is enough.
+Apply this page when a partial, expression, multicolumn, covering (`INCLUDE`), or GIN index is proposed, or when indexing `jsonb`, arrays, or ranges. For ordinary single-column B-trees and FK indexing, [index basics](index-basics.md) is enough.
 
 ## Rule
 
