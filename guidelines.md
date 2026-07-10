@@ -1,6 +1,6 @@
 # Guidelines
 
-Load only the pages whose descriptions match the task. Conditional pages also require a matching `Activation` section.
+Use page descriptions to select pages before loading them. After loading a conditional page, apply it only when its `Activation` section matches.
 
 ## Foundations
 

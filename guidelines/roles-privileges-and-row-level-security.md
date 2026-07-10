@@ -2,7 +2,7 @@
 
 ## Activation
 
-Load this page when creating roles, granting privileges, configuring connections, or deciding how tenant rows are scoped.
+Apply this page when creating roles, granting privileges, configuring connections, or deciding how tenant rows are scoped.
 
 ## Rule
 

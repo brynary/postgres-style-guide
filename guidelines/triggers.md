@@ -2,7 +2,7 @@
 
 ## Activation
 
-Load this page when creating or reviewing any trigger, or when deciding how audit trails or derived data should be maintained.
+Apply this page when creating or reviewing any trigger, or when deciding how audit trails or derived data should be maintained.
 
 ## Rule
 

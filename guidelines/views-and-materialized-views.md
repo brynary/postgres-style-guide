@@ -2,7 +2,7 @@
 
 ## Activation
 
-Load this page when creating or reviewing a view or materialized view, or when deciding whether an analytics report should become one.
+Apply this page when creating or reviewing a view or materialized view, or when deciding whether an analytics report should become one.
 
 ## Rule
 

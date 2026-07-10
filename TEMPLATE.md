@@ -12,7 +12,7 @@ One sentence the agent can follow by default.
 
 Optional sections, in this order when present:
 
-- `Activation`: required for conditional pages; state when to load and skip the page.
+- `Activation`: required for conditional pages; confirm when the loaded page applies and when to skip it.
 - `Why`: one short practical rationale.
 - `Do`: mechanical implications not already stated by the rule.
 - `Avoid`: likely mistakes that are not merely the inverse of `Do`.

@@ -9,8 +9,9 @@ Always load these guideline pages:
 - [Object naming](../guidelines/object-naming.md)
 - [Constraints and NULL semantics](../guidelines/constraints-and-null-semantics.md)
 - [Index basics](../guidelines/index-basics.md)
-- [Advanced indexes](../guidelines/advanced-indexes.md)
 - [Standard columns and row lifecycle](../guidelines/standard-columns-and-row-lifecycle.md)
+
+Load [advanced indexes](../guidelines/advanced-indexes.md) for partial, expression, multicolumn, covering, GIN, JSONB, array, or range indexes.
 
 Greenfield setup with no traffic can use plain DDL; this workflow's rules exist because of live locks.
 

@@ -2,7 +2,7 @@
 
 ## Activation
 
-Load this page when writing or reviewing any `CREATE FUNCTION`/`CREATE PROCEDURE`, including trigger functions. If the task is deciding whether logic belongs in the database at all, start with [house style and Postgres philosophy](house-style-and-postgres-philosophy.md).
+Apply this page when writing or reviewing any `CREATE FUNCTION`/`CREATE PROCEDURE`, including trigger functions. If the task is deciding whether logic belongs in the database at all, start with [house style and Postgres philosophy](house-style-and-postgres-philosophy.md).
 
 ## Rule
 

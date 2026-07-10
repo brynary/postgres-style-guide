@@ -28,7 +28,7 @@ Apply the loaded policy pages directly.
 | Choose columns, JSONB, or arrays | [JSONB and normalization](guidelines/jsonb-arrays-and-normalization.md), [advanced indexes](guidelines/advanced-indexes.md) |
 | Write a multi-step or reporting query | [CTEs](guidelines/ctes-and-query-decomposition.md), [join style](guidelines/select-structure-and-join-style.md), [aggregation and pagination](guidelines/aggregation-window-functions-and-pagination.md) |
 | Write an upsert or bulk write | [DML and upserts](guidelines/dml-upserts-and-returning.md) |
-| Add an index | [index basics](guidelines/index-basics.md), then [advanced indexes](guidelines/advanced-indexes.md) only when activated |
+| Add an index | [index basics](guidelines/index-basics.md), plus [advanced indexes](guidelines/advanced-indexes.md) for partial, expression, multicolumn, covering, GIN, JSONB, array, or range indexes |
 | Add a database function | [functions and procedures](guidelines/functions-and-procedures.md) |
 | Add a trigger | [triggers](guidelines/triggers.md) |
 | Add a view or materialized view | [views and materialized views](guidelines/views-and-materialized-views.md) |
@@ -40,7 +40,8 @@ Apply the loaded policy pages directly.
 - Workflows own multi-step procedures and route to their policy pages.
 - Fast paths load only the directly linked owner pages.
 - Use the guideline index only when no workflow or fast path matches.
-- Load conditional pages only when their `Activation` section applies.
+- Select conditional pages using task descriptions in this router, the guideline index, or workflow routing.
+- After loading a conditional page, apply it only when its `Activation` section matches.
 - Treat live-database migrations as stricter than greenfield DDL.
 - Prefer concrete PostgreSQL guidance over SQL tutorials.
 - Ask one focused question only when required project context is missing.

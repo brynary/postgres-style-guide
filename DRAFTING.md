@@ -27,7 +27,7 @@ Use these instructions when changing the completed style guide.
 - Each workflow appears exactly once in `SKILL.md`.
 - Each guideline appears exactly once in `guidelines.md`.
 - Workflow tasks route to the workflow alone; the workflow selects policy pages in `Guideline Routing`.
-- Conditional pages state when to load and skip them in `Activation`.
+- Routing descriptions state when to select conditional pages; their `Activation` sections confirm whether to apply or skip them after loading.
 - Avoid deep reference chains and unrelated co-loads.
 
 ## Workflow Format
