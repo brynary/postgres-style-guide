@@ -2,9 +2,9 @@
 
 Use this workflow when changing the schema of an existing database that serves traffic: adding or dropping columns, adding constraints or indexes, changing types, or backfilling data.
 
-## Required Guidelines
+## Guideline Routing
 
-Load [guidelines.md](../guidelines.md), then load these guideline pages as needed:
+Always load these guideline pages:
 
 - [Object naming](../guidelines/object-naming.md)
 - [Constraints and NULL semantics](../guidelines/constraints-and-null-semantics.md)

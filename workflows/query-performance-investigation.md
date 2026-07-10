@@ -2,11 +2,10 @@
 
 Use this workflow when a query is slow, a page or job has a database bottleneck, or an index is proposed as a performance fix.
 
-## Required Guidelines
+## Guideline Routing
 
-Load [guidelines.md](../guidelines.md), then load these guideline pages as needed:
+Always load [index basics](../guidelines/index-basics.md). Load the remaining pages only when the query uses their concern:
 
-- [Index basics](../guidelines/index-basics.md)
 - [Advanced indexes](../guidelines/advanced-indexes.md)
 - [CTEs and query decomposition](../guidelines/ctes-and-query-decomposition.md)
 - [Aggregation, window functions, and pagination](../guidelines/aggregation-window-functions-and-pagination.md)

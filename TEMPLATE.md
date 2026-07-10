@@ -1,6 +1,6 @@
 # Guideline Page Template
 
-Use this format for PostgreSQL style guide guideline pages.
+Every guideline page needs a direct `Rule` and must stay at or below 100 lines. Add other sections only when they contribute new information.
 
 ```markdown
 # Guideline Name
@@ -8,41 +8,19 @@ Use this format for PostgreSQL style guide guideline pages.
 ## Rule
 
 One sentence the agent can follow by default.
-
-## Why
-
-Short rationale.
-
-## Do
-
-- Preferred patterns.
-- Naming or DDL/query conventions.
-
-## Avoid
-
-- Common anti-patterns.
-- Cases where agents usually overreach.
-
-## Example
-
-Small preferred SQL example.
-
-## Exceptions
-
-Narrow cases where the default can be broken.
 ```
 
-Optional sections:
+Optional sections, in this order when present:
 
-- `Activation`
-- `Version Notes`
-- `Migration Notes`
-- `Security Notes`
-- `Performance Notes`
-- `Decision Points`
+- `Activation`: required for conditional pages; state when to load and skip the page.
+- `Why`: one short practical rationale.
+- `Do`: mechanical implications not already stated by the rule.
+- `Avoid`: likely mistakes that are not merely the inverse of `Do`.
+- `Example`: the smallest example that clarifies SQL or DDL shape.
+- `Exceptions`: genuine cases where the rule changes.
+- `Version Notes`: minimum PostgreSQL version and older-version fallback.
+- `Migration Notes`: production adoption concerns linked to the safe migration workflow.
+- `Security Notes` or `Performance Notes`: only when the topic requires them.
+- `Decision Points`: unresolved policy that must be settled in [DECISIONS.md](DECISIONS.md).
 
-Use `Activation` for conditional or advanced guideline pages such as advanced indexes, triggers, row-level security, and materialized views. It should say when to load the page and when not to.
-
-Use `Version Notes` when a rule depends on a PostgreSQL version (for example PG18 `uuidv7()`, virtual generated columns, or temporal constraints), stating the minimum version and the fallback for older targets.
-
-Use `Migration Notes` when adopting the rule on an existing production table needs care (locks, rewrites, backfills); link to the safe schema migration workflow instead of restating it.
+Do not add a section that repeats another section. Every example follows the rest of the guide, not only its owning page.

@@ -27,7 +27,7 @@ Keep the work simple, explicit, and useful for agents. Do not turn the guide int
 - Keep guideline pages short, concrete, and mechanical enough for an agent to follow.
 - Put unresolved choices in `Decision Points` instead of hiding them in prose.
 - Keep [SKILL.md](SKILL.md) small. Put detailed policy in `guidelines/` and procedures in `workflows/`.
-- Link guideline and workflow files directly from [SKILL.md](SKILL.md) or [guidelines.md](guidelines.md); avoid deep reference chains.
+- Link each workflow exactly once from [SKILL.md](SKILL.md) and each guideline exactly once from [guidelines.md](guidelines.md); use direct guideline links in `SKILL.md` only for policy fast paths.
 - Run `bash checks/check.sh` before committing skill changes.
 - Do not edit files in [.ai/research/](.ai/research) unless explicitly asked.
 

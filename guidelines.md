@@ -1,6 +1,6 @@
 # Guidelines
 
-Guideline pages are policy; load only those needed for the task.
+Load only the pages whose descriptions match the task. Conditional pages also require a matching `Activation` section.
 
 ## Foundations
 
@@ -43,10 +43,3 @@ Guideline pages are policy; load only those needed for the task.
 ## Security
 
 - [Roles, privileges, and row-level security](guidelines/roles-privileges-and-row-level-security.md) - load when configuring roles, grants, default privileges, or RLS.
-
-## Routing Notes
-
-Task-to-page dispatch lives in [SKILL.md](SKILL.md)'s routing table; these notes only cover cross-cutting co-loads.
-
-- For anything touching `SECURITY DEFINER`, grants, or multi-tenant data, include roles/privileges/RLS.
-- For advanced topics like triggers, materialized views, or RLS, load the page only when the task directly needs it.

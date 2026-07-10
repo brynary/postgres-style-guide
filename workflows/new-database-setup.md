@@ -2,9 +2,9 @@
 
 Use this workflow when standing up a new PostgreSQL database for an application: schemas, roles, privileges, extensions, and the first migrations.
 
-## Required Guidelines
+## Guideline Routing
 
-Load [guidelines.md](../guidelines.md), then load these guideline pages as needed:
+Always load these guideline pages:
 
 - [House style and Postgres philosophy](../guidelines/house-style-and-postgres-philosophy.md)
 - [Schema layout and search_path](../guidelines/schema-layout-and-search-path.md)

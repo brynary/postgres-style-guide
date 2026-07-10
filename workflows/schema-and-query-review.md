@@ -2,9 +2,9 @@
 
 Use this workflow when reviewing a migration, a schema design, or SQL changes in a pull request, or when refactoring existing database code toward the guidelines.
 
-## Required Guidelines
+## Guideline Routing
 
-Load [guidelines.md](../guidelines.md), then load the guideline pages matching what the change touches. For schema changes, always include the new-table page set from [SKILL.md](../SKILL.md)'s routing table:
+Load only the pages matching the changed surface. For schema changes, always include:
 
 - [Object naming](../guidelines/object-naming.md)
 - [Primary keys and row identity](../guidelines/primary-keys-and-row-identity.md)
