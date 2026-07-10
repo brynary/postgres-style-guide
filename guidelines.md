@@ -1,8 +1,6 @@
 # Guidelines
 
-Load this file for PostgreSQL style policy, then load only the guideline pages needed for the task.
-
-Guideline pages are policy. Do not load every guideline page by default.
+Guideline pages are policy; load only those needed for the task.
 
 ## Foundations
 

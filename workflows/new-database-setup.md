@@ -23,7 +23,7 @@ Load [guidelines.md](../guidelines.md), then load these guideline pages as neede
 6. Configure the migration tool to connect as `{app}_owner` (its only client) and the application as the `{app}_rw` login member; verify the app connection cannot run DDL and that objects created by migrations are owned by `{app}_owner`.
 7. Install only extensions the project needs now, each in its own migration with a comment saying what uses it (for example `btree_gist` the first time a temporal or exclusion constraint needs it).
 8. Create the shared `set_updated_at()` trigger function before the first table migration so tables can attach it immediately.
-9. Write the first table migrations following the schema-design guidelines: `uuidv7()` keys, lifecycle columns with triggers, FKs with indexes, `NOT NULL` defaults, named constraints.
+9. Write the first table migrations following the schema-design guidelines: `uuidv7()` keys, lifecycle columns with triggers, FKs with indexes, `NOT NULL` defaults, canonical constraint names.
 10. Seed lookup tables in migrations, not by hand; the table shape lives in [enums, domains, and lookup tables](../guidelines/enums-domains-and-lookup-tables.md).
 11. Set up the safe-migration guardrails from day one: `lock_timeout` in the migration template and the safe schema migration workflow linked from the project docs, so habits do not change when the database goes live.
 12. Verify the topology before first deploy: connect as each login (owner, app member, read-only member) and confirm it can do exactly what it should (owner: DDL; rw: DML only, no DDL; ro: SELECT only).

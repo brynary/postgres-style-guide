@@ -9,11 +9,7 @@ Use this skill to apply the project's PostgreSQL style conventions while designi
 
 ## Supporting Files
 
-- [guidelines.md](guidelines.md) - index of PostgreSQL style policy pages. Load this for ordinary SQL and schema work, then load only the guideline pages relevant to the task.
-- [workflows/safe-schema-migration.md](workflows/safe-schema-migration.md) - workflow for changing schemas on existing databases without downtime: expand/contract, concurrent indexes, staged constraints, and backfills.
-- [workflows/new-database-setup.md](workflows/new-database-setup.md) - workflow for standing up a new database: schemas, roles, default privileges, and migration structure.
-- [workflows/query-performance-investigation.md](workflows/query-performance-investigation.md) - workflow for diagnosing and fixing slow queries with EXPLAIN and index evaluation.
-- [workflows/schema-and-query-review.md](workflows/schema-and-query-review.md) - workflow for reviewing or refactoring existing schemas, migrations, and queries.
+Start with [guidelines.md](guidelines.md) for ordinary SQL and schema work, then load only the pages the task needs. Workflow dispatch lives in the routing table below.
 
 ## Routing Examples
 

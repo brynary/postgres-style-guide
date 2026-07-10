@@ -2,8 +2,6 @@
 
 This repository contains a PostgreSQL style guide packaged as a skill for AI coding agents. The goal is to give agents concrete, opinionated defaults for designing schemas, writing queries, authoring migrations, and configuring database access in the project owner's preferred style.
 
-The packaged skill shape is `SKILL.md` as the root router, focused policy pages under `guidelines/`, and procedure pages under `workflows/`. Planning files remain in the repo as source material, but ordinary skill use should load only the router and relevant guidelines or workflows.
-
 ## Start Here
 
 - [SKILL.md](SKILL.md): skill entrypoint and root router for progressive disclosure.
@@ -51,13 +49,3 @@ mdbook serve --open
 Book source lives under [src/](src). The book source uses symlinks to expose packaged skill files without duplicating the canonical copies at the repository root, and a preprocessor strips SKILL.md's frontmatter from the rendered book.
 
 GitHub Pages deployment is handled by [.github/workflows/deploy.yml](.github/workflows/deploy.yml). For first-time setup, set the repository's Pages source to "GitHub Actions" under Settings > Pages. Pushes to `main` will build the book and deploy the generated `book/` output.
-
-## Packaging Model
-
-The skill uses progressive disclosure:
-
-- `SKILL.md` stays small and routes tasks to relevant guidelines and workflows.
-- `guidelines.md` indexes the available guideline pages.
-- Focused policy pages live under `guidelines/`.
-- Procedural pages live under `workflows/`.
-- Planning files like `README.md`, `OUTLINE.md`, `DRAFTING.md`, `DECISIONS.md`, and `.ai/research/` stay outside the packaged skill unless explicitly needed.

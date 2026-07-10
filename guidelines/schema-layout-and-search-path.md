@@ -13,7 +13,7 @@ One schema keeps DDL, tooling, and queries simple; the real risks are unprivileg
 - Put application objects in `public` for single-application databases.
 - Revoke schema creation from the world once per database: `REVOKE CREATE ON SCHEMA public FROM PUBLIC;` (default since PG15; keep it explicit in setup).
 - Let application SQL rely on the default `search_path` in single-schema databases; do not scatter `public.` qualifiers through queries.
-- Pin the path in every function: `SET search_path = public, pg_temp` in the function definition; see [functions and procedures](functions-and-procedures.md).
+- Pin the path in every function definition: `SET search_path = public, pg_temp`.
 - Schema-qualify object references inside `SECURITY DEFINER` functions even with a pinned path; they execute with the owner's privileges.
 - Split into domain schemas only when one database genuinely hosts multiple domains; then qualify all cross-schema references explicitly.
 

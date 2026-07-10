@@ -10,7 +10,6 @@ Named steps read top to bottom like a pipeline; nested subqueries read inside ou
 
 ## Do
 
-- Introduce a `WITH` clause the moment a query grows a second logical step or a second nesting level.
 - Name each CTE for what its rows are (`paid_orders`, `latest_logins`, `overage_by_user`), not `t1`/`cte2`.
 - Keep each CTE one comprehensible unit: one join cluster, one aggregation, one filter stage.
 - Let the final `SELECT` read as the summary of the steps above it.
@@ -20,9 +19,7 @@ Named steps read top to bottom like a pipeline; nested subqueries read inside ou
 
 ## Avoid
 
-- Do not nest subqueries two levels deep; that is the decomposition threshold.
 - Do not create single-use CTEs for trivial one-step queries; `SELECT ... FROM ... WHERE ...` needs no pipeline.
-- Do not write `MATERIALIZED`/`NOT MATERIALIZED` by habit or superstition; each use is a deliberate, commented choice.
 - Do not reuse a CTE name within a statement or shadow a table name with a CTE.
 - Do not build write pipelines that depend on seeing their own statement's effects; all CTEs in one statement see the same snapshot.
 

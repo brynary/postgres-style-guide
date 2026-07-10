@@ -34,7 +34,7 @@ And for query changes:
 ## Review Checklist
 
 - Every new FK has an index and an explicit `ON DELETE` action.
-- Every constraint and index is explicitly named per the suffix scheme.
+- Every constraint and index has the canonical suffix name; noncanonical generated names are overridden explicitly.
 - No `serial`/`bigserial`, `gen_random_uuid()` primary keys, `varchar(n)`, `char(n)`, `money`, `timestamp without time zone`, `json`, or `CREATE DOMAIN` in new DDL.
 - New columns are `NOT NULL` or the nullability is meaningful.
 - Durable tables carry `created_at`/`updated_at` and the `set_updated_at` trigger.
