@@ -13,7 +13,7 @@ The packaged skill uses [SKILL.md](../SKILL.md) as its router, [guidelines.md](.
 | Foundations | [Object naming](../guidelines/object-naming.md) | D7-D9 |
 | Foundations | [Schema layout and search_path](../guidelines/schema-layout-and-search-path.md) | D10, D11 |
 | Foundations | [SQL formatting and comments](../guidelines/sql-formatting-and-comments.md) | D4-D6, D34 |
-| Schema design | [Primary keys and row identity](../guidelines/primary-keys-and-row-identity.md) | D12, D13 |
+| Schema design | [Primary keys and row identity](../guidelines/primary-keys-and-row-identity.md) | D12, D13, D49 |
 | Schema design | [Foreign keys and relationships](../guidelines/foreign-keys-and-relationships.md) | D14, D15 |
 | Schema design | [Scalar types](../guidelines/scalar-types.md) | D16-D18 |
 | Schema design | [Temporal data and time zones](../guidelines/temporal-data-and-time-zones.md) | D19, D20 |

@@ -55,4 +55,5 @@ CREATE INDEX order_items_order_id_idx ON order_items (order_id);
 ## Exceptions
 
 - High-volume append-only event/log tables may hold soft references without FK constraints, with a documented reason; retention jobs should not block business-row deletes.
+- Polymorphic actor/subject references use paired type-and-ID columns (`actor_type text` plus `actor_id uuid`) without FK constraints; constrain the type column with a named `CHECK` and document the reason.
 - Cross-database or cross-service references cannot be FKs; name the column normally and validate in the application.

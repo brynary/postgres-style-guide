@@ -24,7 +24,7 @@ Data inside `jsonb` loses what the database provides: type checking, constraints
 - Do not put core business attributes in `jsonb` to avoid a migration; that trades a cheap `ADD COLUMN` for permanent statistics blindness.
 - Do not join on values inside `jsonb` documents.
 - Do not use `jsonb[]`; use one `jsonb` column holding an array.
-- Do not store arrays of IDs referencing other tables; array elements cannot have FK constraints, so orphans accumulate silently.
+- Do not store arrays of IDs referencing other tables (array elements cannot have FK constraints, so orphans accumulate silently), outside the immutable-list exception below.
 - Do not update single fields of large `jsonb` values on hot paths; every update rewrites the whole value.
 - Do not mirror the same fact in both a column and a `jsonb` document; pick one owner.
 
@@ -50,3 +50,4 @@ CREATE TABLE imported_listings (
 
 - Ingestion staging tables may be a single `jsonb` column plus bookkeeping fields; promotion to columns happens downstream.
 - Read-model/cache tables rebuilt from canonical data may denormalize freely, including `jsonb` projections; they must be rebuildable, not sources of truth.
+- Write-once ID arrays may reference tables that are never hard-deleted, with a documented reason at the column; without deletes, orphans cannot arise. A junction table is still required the moment membership carries authority, per-element attributes beyond order, or row-level constraints.

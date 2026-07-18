@@ -11,7 +11,8 @@ UUIDv7 values are time-ordered, so they index like sequential keys while staying
 ## Do
 
 - Declare `id uuid DEFAULT uuidv7() PRIMARY KEY` on every new table.
-- Expose the `id` directly in APIs and URLs; no second public identifier is needed.
+- Expose the `id` directly in APIs and URLs by default; no second public identifier is needed.
+- When the product requires prefixed identifiers (`usr_V1StGXR8Z5`), add `public_id text NOT NULL` with a unique constraint: the type prefix plus an independently generated random suffix. The uuid `id` stays internal for every FK; APIs and URLs then expose only `public_id`.
 - Enforce natural keys (email, SKU, external reference) with unique constraints; see [index basics](index-basics.md) for constraint vs index.
 - Use `bigint GENERATED ALWAYS AS IDENTITY` instead only when key compactness or extreme insert concurrency demonstrably matters, and note why in the migration.
 - Give junction tables their own `id` plus a unique constraint over the pair of foreign keys.
@@ -23,6 +24,7 @@ UUIDv7 values are time-ordered, so they index like sequential keys while staying
 - Do not use natural keys as primary keys, even "stable" ones; emails change and codes get recycled, and the change ripples through every foreign key.
 - Do not use composite primary keys on business tables; use `id` plus a unique constraint.
 - Do not mix key strategies within a schema without a documented reason.
+- Do not derive `public_id` from the PK bits (TypeID-style encoding) or the PK from `public_id`; the two are independent values joined by an indexed lookup.
 
 ## Example
 
